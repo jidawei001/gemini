@@ -5,6 +5,22 @@ import os
 import numpy as np
 import textblob
 
+
+import joblib
+from transformers import BertTokenizer, BertModel
+import torch
+
+# Load the BERT model classifier
+bert_model = joblib.load('bert_model.pkl')
+
+# Load the BERT tokenizer (ensure it's the same tokenizer used in training)
+tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+
+# Load the BERT model (if you need embeddings, but the classifier is separate)
+bert_embedding_model = BertModel.from_pretrained('bert-base-uncased')
+
+
+
 api = os.getenv("MAKERSUITE_API_TOKEN")
 model = {"model":"models/text-bison-001"}
 palm.configure(api_key=api)
