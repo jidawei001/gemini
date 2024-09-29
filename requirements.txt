@@ -6,3 +6,4 @@ textblob
 transformers
 joblib
 torch
+sklearn
