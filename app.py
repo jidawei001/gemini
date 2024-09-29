@@ -94,6 +94,26 @@ def makersuite_gen():
     r = palm.generate_text(**model, prompt=q)
     return(render_template("makersuite_gen_reply.html",r=r.result))
 
+
+
+@app.route("/text_classification",methods=["GET","POST"])
+def text_classification():
+    return(render_template("text_classification.html"))
+
+def get_bert_embeddings(text_list):
+    tokens = tokenizer(text_list, padding=True, truncation=True, return_tensors="pt", max_length=128)
+    with torch.no_grad():
+        outputs = bert_embedding_model(**tokens)
+    return outputs.last_hidden_state[:, 0, :].numpy()  # CLS token representation
+
+@app.route("/text_classification_result",methods=["GET","POST"])
+def text_classification_result():
+    q = request.form.get("q")
+    input_embedding = get_bert_embeddings([q])
+    prediction = bert_model.predict(input_embedding)
+    r = 'spam' if prediction[0] == 1 else 'ham'
+    return(render_template("text_classification_result.html",r=r))
+
 if __name__ == "__main__":
     app.run()
 
