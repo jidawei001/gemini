@@ -3,3 +3,6 @@ google-generativeai
 flask
 numpy
 textblob
+transformers
+joblib
+torch
